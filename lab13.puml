@@ -1,0 +1,50 @@
+@startuml
+class MedicalRecord {
+  - date: LocalDate
+  - time: LocalTime
+  - patientId: String
+  - appointment: String
+  - status: RecordStatus
+  + MedicalRecord(date, time, patientId, appointment, status)
+  + date(): LocalDate
+  + time(): LocalTime
+  + patientId(): String
+  + appointment(): String
+  + status(): RecordStatus
+}
+
+enum RecordStatus {
+  COMPLETED
+  SCHEDULED
+  CANCELLED
+}
+
+class MedicalReport {
+  - totalRecords: int
+  - completedVisits: int
+  - cancelledVisits: int
+  + MedicalReport(totalRecords, completedVisits, cancelledVisits)
+  + totalRecords(): int
+  + completedVisits(): int
+  + cancelledVisits(): int
+}
+
+class MedicalRecordProcessor {
+  - RECORD_PATTERN: Pattern
+  + normalizeWhitespace(line: String): String
+  + parseLine(rawLine: String): MedicalRecord
+  + parseLines(rawLines: List<String>): List<MedicalRecord>
+  + summarize(records: List<MedicalRecord>): MedicalReport
+  + buildReport(records: List<MedicalRecord>): String
+}
+
+class Main {
+  + main(args: String[])
+  - readResourceLines(resourceName: String): List<String>
+}
+
+MedicalRecord --> RecordStatus
+MedicalRecordProcessor ..> MedicalRecord : створює
+MedicalRecordProcessor ..> MedicalReport : створює
+Main ..> MedicalRecordProcessor : використовує
+@enduml
